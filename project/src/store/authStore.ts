@@ -1,3 +1,4 @@
+
 // src/store/authStore.ts
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
@@ -6,9 +7,10 @@ interface User {
   fullName: string;
   email: string;
   contactNumber: string;
-  role: 'buyer' | 'seller';
+  role: 'buyer' | 'seller' | 'agent' | 'admin';
   token: string;
   userId: string;
+  isVerified?: boolean;
 }
 
 interface AuthStore {

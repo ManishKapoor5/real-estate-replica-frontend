@@ -19,35 +19,11 @@ const Login = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // const handleLogin = (e: React.FormEvent) => {
-  //   e.preventDefault();
-    
-  //   if (!email || !password) {
-  //     toast({
-  //       title: "Error",
-  //       description: "Please fill in all fields",
-  //       variant: "destructive",
-  //     });
-  //     return;
-  //   }
-    
-  //   setIsLoading(true);
-    
-  //   // Simulate login request
-  //   setTimeout(() => {
-  //     toast({
-  //       title: "Success",
-  //       description: "You have been logged in successfully!",
-  //     });
-  //     setIsLoading(false);
-      
-  //     // Redirect to dashboard after login (would normally use React Router's navigate)
-  //     window.location.href = "/user-dashboard";
-  //   }, 1500);
-  // };
-
-    const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError('');
+    
     try {
       const res = await axios.post('http://localhost:3000/api/v1/RealEstateUser/login', {
         email,
@@ -61,10 +37,40 @@ const Login = () => {
         role: data.user.role,
         token: data.token,
         userId: data.user._id,
+        isVerified: data.user.isVerified
       });
-      navigate(`/${data.user.role}-dashboard`);
+      
+      // Redirect based on user role
+      switch(data.user.role) {
+        case 'buyer':
+          navigate('/buyer-dashboard');
+          break;
+        case 'seller':
+          navigate('/seller-dashboard');
+          break;
+        case 'agent':
+          navigate('/agent-dashboard');
+          break;
+        case 'admin':
+          navigate('/admin-dashboard');
+          break;
+        default:
+          navigate('/user-dashboard');
+      }
+      
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${data.user.fullName}!`,
+      });
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
+      toast({
+        title: "Login Failed",
+        description: err.response?.data?.message || "Invalid credentials. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,6 +94,11 @@ const Login = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {error && (
+              <div className="bg-red-50 text-red-600 p-3 rounded-md mb-4">
+                {error}
+              </div>
+            )}
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">Email</label>

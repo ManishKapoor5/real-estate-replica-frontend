@@ -3,18 +3,17 @@ import { Button } from "@/components/ui/button";
 import { 
   Building, 
   Home, 
-  Info,
-  Mail,
   Menu, 
   Plus, 
   Search, 
   User
 } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
+  const navigate = useNavigate();
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto flex items-center justify-between h-16 px-4 md:px-6">
@@ -26,25 +25,20 @@ const Header = () => {
         </div>
         
         <div className="hidden md:flex items-center space-x-1">
-          <NavItem title="Buy" icon={<Home size={18} />} href="/property-listings" active />
-          <NavItem title="Rent" icon={<Building size={18} />} href="/property-listings" />
-          <NavItem title="Sell" icon={<Plus size={18} />} href="/property-listings" />
-          <NavItem title="About Us" icon={<Info size={18} />} href="/about-us" />
-          <NavItem title="Contact" icon={<Mail size={18} />} href="/contact" />
+          <NavItem title="Buy" icon={<Home size={18} />} active />
+          <NavItem title="Rent" icon={<Building size={18} />} />
+          <NavItem title="Sell" icon={<Plus size={18} />} />
+          <NavItem title="Home Loans" />
         </div>
         
         <div className="flex items-center">
-          <Button variant="outline" size="sm" className="mr-2 hidden md:flex" asChild>
-            <a href="/property-listings">
-              <Search size={16} className="mr-1" />
-              Search
-            </a>
+          <Button variant="outline" size="sm" className="mr-2 hidden md:flex">
+            <Search size={16} className="mr-1" />
+            Search
           </Button>
-          <Button variant="ghost" size="sm" className="hidden md:flex" asChild>
-            <a href="/login">
-              <User size={16} className="mr-1" />
-              Login
-            </a>
+          <Button onClick={()=>navigate("/login")} variant="ghost" size="sm" className="hidden md:flex">
+            <User size={16} className="mr-1" />
+            Login
           </Button>
           <Button 
             variant="ghost" 
@@ -60,12 +54,11 @@ const Header = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-white shadow-md">
           <div className="px-4 pt-2 pb-4 space-y-3">
-            <MobileNavItem title="Buy" icon={<Home size={18} />} href="/property-listings" active />
-            <MobileNavItem title="Rent" icon={<Building size={18} />} href="/property-listings" />
-            <MobileNavItem title="Sell" icon={<Plus size={18} />} href="/property-listings" />
-            <MobileNavItem title="About Us" icon={<Info size={18} />} href="/about-us" />
-            <MobileNavItem title="Contact" icon={<Mail size={18} />} href="/contact" />
-            <MobileNavItem title="Login" icon={<User size={18} />} href="/login" />
+            <MobileNavItem title="Buy" icon={<Home size={18} />} active />
+            <MobileNavItem title="Rent" icon={<Building size={18} />} />
+            <MobileNavItem title="Sell" icon={<Plus size={18} />} />
+            <MobileNavItem title="Home Loans" />
+            <MobileNavItem title="Login" icon={<User size={18} />} />
           </div>
         </div>
       )}
@@ -73,9 +66,9 @@ const Header = () => {
   );
 };
 
-const NavItem = ({ title, icon, href = "#", active = false }: { title: string; icon?: React.ReactNode; href?: string; active?: boolean }) => (
+const NavItem = ({ title, icon, active = false }: { title: string; icon?: React.ReactNode; active?: boolean }) => (
   <a
-    href={href}
+    href="#"
     className={`px-3 py-2 rounded-md text-sm font-medium flex items-center ${
       active ? "text-primary" : "text-gray-700 hover:text-primary"
     }`}
@@ -86,9 +79,9 @@ const NavItem = ({ title, icon, href = "#", active = false }: { title: string; i
   </a>
 );
 
-const MobileNavItem = ({ title, icon, href = "#", active = false }: { title: string; icon?: React.ReactNode; href?: string; active?: boolean }) => (
+const MobileNavItem = ({ title, icon, active = false }: { title: string; icon?: React.ReactNode; active?: boolean }) => (
   <a
-    href={href}
+    href="#"
     className={`block px-3 py-2 rounded-md text-base font-medium flex items-center ${
       active ? "text-primary bg-accent" : "text-gray-700 hover:bg-gray-50 hover:text-primary"
     }`}

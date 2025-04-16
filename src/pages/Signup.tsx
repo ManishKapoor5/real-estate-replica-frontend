@@ -3,8 +3,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Building, Facebook, Google } from "lucide-react";
+import { Building, Facebook, Square } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -13,42 +15,66 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSignup = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    contactNumber: '',
+    role: 'buyer',
+  });
+
+  const [error, setError] = useState('');
+  // const handleSignup = (e: React.FormEvent) => {
+  //   e.preventDefault();
     
-    if (!name || !email || !phone || !password || !confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
-    }
+  //   if (!name || !email || !phone || !password || !confirmPassword) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Please fill in all fields",
+  //       variant: "destructive",
+  //     });
+  //     return;
+  //   }
     
-    if (password !== confirmPassword) {
-      toast({
-        title: "Error",
-        description: "Passwords do not match",
-        variant: "destructive",
-      });
-      return;
-    }
+  //   if (password !== confirmPassword) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Passwords do not match",
+  //       variant: "destructive",
+  //     });
+  //     return;
+  //   }
     
-    setIsLoading(true);
+  //   setIsLoading(true);
     
-    // Simulate signup request
-    setTimeout(() => {
-      toast({
-        title: "Account created",
-        description: "Your account has been created successfully!",
-      });
-      setIsLoading(false);
+  //   // Simulate signup request
+  //   setTimeout(() => {
+  //     toast({
+  //       title: "Account created",
+  //       description: "Your account has been created successfully!",
+  //     });
+  //     setIsLoading(false);
       
-      // Redirect to login after signup (would normally use React Router's navigate)
-      window.location.href = "/login";
-    }, 1500);
+  //     // Redirect to login after signup (would normally use React Router's navigate)
+  //     window.location.href = "/login";
+  //   }, 1500);
+  // };
+
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await axios.post('http://localhost:3000/api/v1/RealEstateUser/signup', formData);
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Signup failed');
+    }
   };
 
   return (
@@ -71,7 +97,7 @@ const Signup = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSignup} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="name" className="text-sm font-medium">Full Name</label>
                 <Input 
@@ -147,7 +173,7 @@ const Signup = () => {
             
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" className="w-full">
-                <Google className="w-4 h-4 mr-2" />
+                <Square className="w-4 h-4 mr-2" />
                 Google
               </Button>
               <Button variant="outline" className="w-full">

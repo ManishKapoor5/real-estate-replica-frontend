@@ -18,9 +18,10 @@ import {
   Phone, 
   Share2, 
   ShowerHead,
-  SquareFootage
+  Square,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 
 // Sample property data
 const property = {
@@ -74,10 +75,10 @@ const PropertyDetails = () => {
       <main className="flex-1 bg-gray-50">
         <div className="container mx-auto px-4 py-6">
           <Button variant="ghost" className="mb-4" asChild>
-            <a href="/property-listings">
+            <Link to="/property-listings">
               <ArrowLeft size={16} className="mr-2" />
               Back to Listings
-            </a>
+            </Link>
           </Button>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -141,7 +142,7 @@ const PropertyDetails = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <SquareFootage size={20} className="text-gray-500" />
+                      <Square size={20} className="text-gray-500" />
                       <div>
                         <p className="font-medium">{property.size}</p>
                         <p className="text-xs text-gray-500">Built-up Area</p>

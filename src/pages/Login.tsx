@@ -3,40 +3,69 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Building, Facebook, Google } from "lucide-react";
+import { Building, Facebook, Square} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Link } from "react-router-dom";
+import { useAuthStore } from "@/store/authStore";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState("");
+  const setUser = useAuthStore((state) => state.setUser);
   const [password, setPassword] = useState("");
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleLogin = (e: React.FormEvent) => {
+  //   e.preventDefault();
     
-    if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
-    }
+  //   if (!email || !password) {
+  //     toast({
+  //       title: "Error",
+  //       description: "Please fill in all fields",
+  //       variant: "destructive",
+  //     });
+  //     return;
+  //   }
     
-    setIsLoading(true);
+  //   setIsLoading(true);
     
-    // Simulate login request
-    setTimeout(() => {
-      toast({
-        title: "Success",
-        description: "You have been logged in successfully!",
-      });
-      setIsLoading(false);
+  //   // Simulate login request
+  //   setTimeout(() => {
+  //     toast({
+  //       title: "Success",
+  //       description: "You have been logged in successfully!",
+  //     });
+  //     setIsLoading(false);
       
-      // Redirect to dashboard after login (would normally use React Router's navigate)
-      window.location.href = "/user-dashboard";
-    }, 1500);
+  //     // Redirect to dashboard after login (would normally use React Router's navigate)
+  //     window.location.href = "/user-dashboard";
+  //   }, 1500);
+  // };
+
+    const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post('http://localhost:3000/api/v1/RealEstateUser/login', {
+        email,
+        password,
+      });
+      const data = res.data;
+      setUser({
+        fullName: data.user.fullName,
+        email: data.user.email,
+        contactNumber: data.user.contactNumber,
+        role: data.user.role,
+        token: data.token,
+        userId: data.user._id,
+      });
+      navigate(`/${data.user.role}-dashboard`);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Login failed');
+    }
   };
 
   return (
@@ -107,7 +136,7 @@ const Login = () => {
             
             <div className="grid grid-cols-2 gap-4">
               <Button variant="outline" className="w-full">
-                <Google className="w-4 h-4 mr-2" />
+                <Square className="w-4 h-4 mr-2" />
                 Google
               </Button>
               <Button variant="outline" className="w-full">
@@ -119,9 +148,9 @@ const Login = () => {
           <CardFooter className="flex justify-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <a href="/signup" className="text-primary font-medium hover:underline">
+              <Link to="/signup" className="text-primary font-medium hover:underline">
                 Sign up
-              </a>
+              </Link>
             </p>
           </CardFooter>
         </Card>

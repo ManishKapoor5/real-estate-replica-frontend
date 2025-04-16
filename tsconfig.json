@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {
   "files": [],
   "references": [
@@ -19,24 +18,3 @@
   }
 }
 
-=======
-{
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "noImplicitAny": false,
-    "noUnusedParameters": false,
-    "skipLibCheck": true,
-    "allowJs": true,
-    "noUnusedLocals": false,
-    "strictNullChecks": false
-  }
-}
->>>>>>> 864dee7a06de2c07be8394efa3613e4d9e5c0eab

@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Link } from 'react-router-dom';
 import { Building, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 const Footer = () => {
@@ -69,11 +70,11 @@ const Footer = () => {
             <div>
               <h3 className="text-white font-semibold mb-4">Legacy land Real Estate</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-400 hover:text-primary">About Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-primary">Careers</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-primary">Contact Us</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-primary">Advertise</a></li>
-                <li><a href="#" className="text-gray-400 hover:text-primary">Privacy Policy</a></li>
+                <li><Link to="/about-us" className="text-gray-400 hover:text-primary">About Us</Link></li>
+                <li><Link to="/careers" className="text-gray-400 hover:text-primary">Careers</Link></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-primary">Contact Us</Link></li>
+                <li><Link to="/advertise" className="text-gray-400 hover:text-primary">Advertise</Link></li>
+                <li><Link to="/privacy" className="text-gray-400 hover:text-primary">Privacy Policy</Link></li>
               </ul>
             </div>
           </div>
